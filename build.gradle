@@ -1,0 +1,74 @@
+plugins {
+	id 'java'
+	id 'org.jetbrains.kotlin.jvm' version '1.3.61'
+}
+
+group 'io.github.cadrizor'
+version '0.5.1'
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	jcenter()
+
+	maven {
+		url 'https://libraries.minecraft.net'
+	}
+}
+
+task copyBuilds(type: Copy) {
+	def dirPath = "jarfiles/$version"
+	def dirFile = file dirPath
+	if (!dirFile.exists())
+		dirFile.mkdirs()
+
+	from ('build/libs') {
+		include '*.jar'
+	}
+	into dirPath
+}
+
+task shadowJar(type: Jar) {
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	manifest {
+		attributes 'Main-Class' : 'io.github.cadrizor_team.cadrizor_bot.Main'
+	}
+	archiveClassifier.set('all')
+	with jar
+}
+
+configurations {
+	hosted
+}
+
+task hostedJar(type: Jar) {
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	from { configurations.hosted.collect { it.isDirectory() ? it : zipTree(it) } }
+	manifest {
+		attributes 'Main-Class' : 'io.github.cadrizor_team.cadrizor_bot.Main'
+	}
+	archiveClassifier.set('hosted')
+	with jar
+}
+
+dependencies {
+	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+	hosted 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.61'
+
+	compile ('net.dv8tion:JDA:4.2.0_168') {
+		exclude module: 'opus-java'
+	}
+
+	compile 'com.flowpowered:flow-nbt:1.0.0'
+	compile 'com.mojang:brigadier:1.0.17'
+	compile 'commons-io:commons-io:2.4'
+}
+
+compileKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+
+compileTestKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
