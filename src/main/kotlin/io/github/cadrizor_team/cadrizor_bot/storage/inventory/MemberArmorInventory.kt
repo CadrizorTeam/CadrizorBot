@@ -39,10 +39,12 @@ class MemberArmorInventory {
 	private fun produceTag(type: ArmorType, armory: Armories): CompoundTag {
 		val armoryTag = CompoundTag(type.name.toLowerCase(), CompoundMap())
 		armoryTag["tier"] = armory.tier.name.toLowerCase()
-		if (armory is Armories.Helmet) armoryTag["stats"] = armory.ints
-		if (armory is Armories.Chestplate) armoryTag["stats"] = armory.ints
-		if (armory is Armories.Leggings) armoryTag["stats"] = armory.ints
-		if (armory is Armories.Boots) armoryTag["stats"] = armory.ints
+		when (armory) {
+			is Armories.Helmet -> armoryTag["stats"] = armory.ints
+			is Armories.Chestplate -> armoryTag["stats"] = armory.ints
+			is Armories.Leggings -> armoryTag["stats"] = armory.ints
+			is Armories.Boots -> armoryTag["stats"] = armory.ints
+		}
 		return armoryTag
 	}
 

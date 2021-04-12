@@ -22,6 +22,7 @@ object XPCommand {
 				CadrizEmbedBuilder.result("Experience", member)
 						.addField("Level", "Current: ${inv.xp.level}\nClaimed: ${inv.claimedLvl}", true)
 						.addField("Experience", inv.xp.display(), true)
+						.send(event)
 				1
 			}!!
 }

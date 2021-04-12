@@ -14,32 +14,37 @@ operator fun CompoundTag.get(key: String) = value[key]
 
 @JvmName("getInt")
 operator fun CompoundTag.get(pair: Pair<String, Int>): Int {
-	val subTag = this[pair.first] as IntTag?
-	return subTag?.value ?: pair.second
+	assert(this[pair.first] == null || this[pair.first] is IntTag)
+	val subTag = this[pair.first] ?: IntTag(pair.first, pair.second)
+	return (subTag as IntTag).value
 }
 
 @JvmName("getFloat")
 operator fun CompoundTag.get(pair: Pair<String, Float>): Float {
-	val subTag = this[pair.first] as FloatTag?
-	return subTag?.value ?: pair.second
+	assert(this[pair.first] == null || this[pair.first] is FloatTag)
+	val subTag = this[pair.first] ?: FloatTag(pair.first, pair.second)
+	return (subTag as FloatTag).value
 }
 
 @JvmName("getLong")
 operator fun CompoundTag.get(pair: Pair<String, Long>): Long {
-	val subTag = this[pair.first] as LongTag?
-	return subTag?.value ?: pair.second
+	assert(this[pair.first] == null || this[pair.first] is LongTag)
+	val subTag = this[pair.first] ?: LongTag(pair.first, pair.second)
+	return (subTag as LongTag).value
 }
 
 @JvmName("getBoolean")
 operator fun CompoundTag.get(pair: Pair<String, Boolean>): Boolean {
-	val subTag = this[pair.first] as ByteTag?
-	return subTag?.booleanValue ?: pair.second
+	assert(this[pair.first] == null || this[pair.first] is ByteTag)
+	val subTag = this[pair.first] ?: ByteTag(pair.first, pair.second)
+	return (subTag as ByteTag).booleanValue
 }
 
 @JvmName("getString")
 operator fun CompoundTag.get(pair: Pair<String, String>): String {
-	val subTag = this[pair.first] as StringTag?
-	return subTag?.value ?: pair.second
+	assert(this[pair.first] == null || this[pair.first] is StringTag)
+	val subTag = this[pair.first] ?: StringTag(pair.first, pair.second)
+	return (subTag as StringTag).value
 }
 
 @JvmName("setInt")
