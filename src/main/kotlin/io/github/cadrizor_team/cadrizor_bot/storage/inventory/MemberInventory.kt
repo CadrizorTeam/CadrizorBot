@@ -11,7 +11,7 @@ import io.github.cadrizor_team.cadrizor_bot.storage.DataStorage
 import io.github.cadrizor_team.cadrizor_bot.utils.XPNumber
 import net.dv8tion.jda.api.entities.Member
 
-class MemberInventory {
+class MemberInventory(private val dontCheck: Boolean = false) {
 	var prestige = MemberPrestigeInventory()
 
 	var money = NumberFactory.zero().toLong()
@@ -111,12 +111,12 @@ class MemberInventory {
 	var armor = MemberArmorInventory()
 
 	init {
-		applyStorageUpgrade()
+		if (!dontCheck) applyStorageUpgrade()
 	}
 
 	private fun maxima(it: Int): Int {
 		var store = it.toDouble()
-		for (i in 1..prestige.lvlStorage) {
+		for (i in 0 until prestige.lvlStorage) {
 			store *= 3.0
 			store /= 2.0
 		}
@@ -124,7 +124,7 @@ class MemberInventory {
 	}
 
 	fun applyStorageUpgrade() {
-		val e = MemberInventory()
+		val e = MemberInventory(true)
 		maxWood = maxima(e.maxWood)
 		maxCharcoal = maxima(e.maxCharcoal)
 		maxCoal = maxima(e.maxCoal)
