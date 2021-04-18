@@ -61,6 +61,7 @@ object PrestigeCommand {
 					tag.value["inventory"] = CompoundTag("inventory", CompoundMap())
 
 					val inventory2 = MemberInventory.deserialize(tag)
+					inventory2.applyStorageUpgrade()
 					inventory2.storeData(member)
 
 					CadrizEmbedBuilder.result("Prestige / Success", member)
