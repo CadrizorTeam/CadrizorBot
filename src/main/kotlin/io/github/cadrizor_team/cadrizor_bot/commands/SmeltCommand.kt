@@ -35,8 +35,8 @@ object SmeltCommand {
 					return@executes -1
 				}
 
-				val minv = MemberInventory.deserialize(result.memberTag)
-				val level = minv.furnaceLevel
+				val inv = MemberInventory.deserialize(result.memberTag)
+				val level = inv.furnaceLevel
 				if (level == NONE) {
 					CadrizEmbedBuilder
 							.missingFactory("Furnace", "${Main.prefixes.user}craft furnace")
@@ -45,7 +45,7 @@ object SmeltCommand {
 				}
 
 				CadrizEmbedBuilder.result("Furnace Interface", member)
-						.addField("Max Smelting", "${level.maxInput}", true)
+						.addField("Max Smelting", "${PrestigeUtils.getFurnaceSize(level, inv)}", true)
 						.addField("Output Dupe", "x${level.smeltingResult}", true)
 						.addField("Smelt", "c%smelt smelt", true)
 						.addField("Upgrade", "c%smelt upgrade", true)

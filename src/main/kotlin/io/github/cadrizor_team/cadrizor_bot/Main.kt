@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag
 import javax.security.auth.login.LoginException
 
 object Main {
-	const val VERSION = "0.5.1"
+	const val VERSION = "0.5.2"
 	const val PROJECT_URL = "https://cadrizorteam.cf/bot"
 	val ADMIN_DISPATCHER = CommandDispatcher<GMREvent>()
 	val USER_DISPATCHER = CommandDispatcher<GMREvent>()
