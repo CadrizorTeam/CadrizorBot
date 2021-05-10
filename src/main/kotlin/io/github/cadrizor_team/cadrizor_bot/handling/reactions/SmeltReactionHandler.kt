@@ -21,10 +21,9 @@ class SmeltReactionHandler(member: Member, private val choice: String) : Message
 			}
 			name == DiscordEmotes.OK -> {
 				val embed = message.embeds[0]
-				val index = embed.fields.indexOfFirst { field -> field.name == "Count" }
-				val field = embed.fields[if (index >= 0) index else 0]
+				val field = embed.fields.firstOrNull { it.name == "Count" }
 				val value = try {
-					Integer.parseInt(field.value)
+					Integer.parseInt(field?.value ?: "0")
 				} catch (exception: Exception) {
 					0
 				}
@@ -34,11 +33,10 @@ class SmeltReactionHandler(member: Member, private val choice: String) : Message
 				message.delete().queue()
 				true
 			}
-			message.embeds.size > 0 -> {
+			message.embeds.size > 0 && message.embeds[0].fields.size > 0 -> {
 				val embed = message.embeds[0]
-				val index = embed.fields.indexOfFirst { it.name == "Count" }
-				val field = embed.fields[if (index >= 0) index else 0]
-				val value = (field.value ?: "0").let {
+				val field = embed.fields.firstOrNull { it.name == "Count" }
+				val value = (field?.value ?: "0").let {
 					if (name == DiscordEmotes.BACK)
 						try {
 							val number = Integer.parseInt(it)
@@ -57,7 +55,7 @@ class SmeltReactionHandler(member: Member, private val choice: String) : Message
 				val builder = EmbedBuilder(embed).clearFields()
 				embed.fields.forEach {
 					if (it.name != "Count") builder.addField(it)
-					else builder.addField(field.name, value, field.isInline)
+					else builder.addField(field?.name, value, field?.isInline ?: true)
 				}
 				message.editMessage(builder.build()).queue()
 				false

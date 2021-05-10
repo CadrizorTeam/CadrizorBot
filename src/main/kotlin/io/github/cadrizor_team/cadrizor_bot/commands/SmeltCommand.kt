@@ -81,7 +81,7 @@ object SmeltCommand {
 				1
 			}!!
 
-	private fun smeltSmelt() = argument<GMREvent, String>("id", word())
+	private fun smeltSmelt() = literal<GMREvent>("smelt")
 			.then(argument<GMREvent, String>("id", word())
 					.then(argument<GMREvent, Int>("times", integer(1))
 							.executes {
@@ -119,8 +119,8 @@ object SmeltCommand {
 							return@executes -1
 						}
 
-						val minv = MemberInventory.deserialize(result.memberTag)
-						val level = minv.furnaceLevel
+						val inv = MemberInventory.deserialize(result.memberTag)
+						val level = inv.furnaceLevel
 						if (level === NONE) {
 							CadrizEmbedBuilder
 									.missingFactory("Furnace", "${Main.prefixes.user}craft furnace")
@@ -132,7 +132,7 @@ object SmeltCommand {
 								.result("Smelting Interface", member)
 								.addField("Resource", getString(it, "id"), true)
 								.addField("Count", "0", true)
-								.addField("Max", "${level.maxInput}", true)
+								.addField("Max", "${PrestigeUtils.getFurnaceSize(level, inv)}", true)
 								.send(event) { message ->
 									message.addReaction(DiscordEmotes.number0).queue()
 									message.addReaction(DiscordEmotes.number1).queue()
@@ -161,21 +161,21 @@ object SmeltCommand {
 					return@executes -1
 				}
 
-				val minv = MemberInventory.deserialize(result.memberTag)
-				val level = minv.furnaceLevel
+				val inv = MemberInventory.deserialize(result.memberTag)
+				val level = inv.furnaceLevel
 				if (level == NONE) {
 					CadrizEmbedBuilder.missingFactory("Furnace", "${Main.prefixes.user}craft furnace").send(event)
 					return@executes -1
 				}
 
-				val emote: (Int) -> String = { qty -> if (qty > 0) ":white_check_mark:" else ":x:" }
-				var message = "${emote(minv.wood)} 1 Wood -> ${level.smeltingResult} Charcoal"
-				message += "\n${emote(minv.cobble)} 1 Cobble -> ${level.smeltingResult} Stone"
-				message += "\n${emote(minv.ironOre)} 1 Iron Ore -> ${level.smeltingResult} Iron Ingot"
-				message += "\n${emote(minv.goldOre)} 1 Gold Ore -> ${level.smeltingResult} Gold Ingot"
-				message += "\n${emote(minv.diamondOre)} 1 Diamond Ore -> ${level.smeltingResult} Diamond"
-				message += "\n${emote(minv.emeraldOre)} 1 Emerald Ore -> ${level.smeltingResult} Emerald"
-				message += "\n${emote(minv.cadrizOre)} 1 Cadrizor -> ${level.smeltingResult} Cadriz"
+				val e: (Int) -> String = { am -> if (am > 0) ":white_check_mark:" else ":x:" }
+				var message = "${e(inv.wood)} 1 Wood -> ${level.smeltingResult} Charcoal"
+				message += "\n${e(inv.cobble)} 1 Cobble -> ${level.smeltingResult} Stone"
+				message += "\n${e(inv.ironOre)} 1 Iron Ore -> ${level.smeltingResult} Iron Ingot"
+				message += "\n${e(inv.goldOre)} 1 Gold Ore -> ${level.smeltingResult} Gold Ingot"
+				message += "\n${e(inv.diamondOre)} 1 Diamond Ore -> ${level.smeltingResult} Diamond"
+				message += "\n${e(inv.emeraldOre)} 1 Emerald Ore -> ${level.smeltingResult} Emerald"
+				message += "\n${e(inv.cadrizOre)} 1 Cadrizor -> ${level.smeltingResult} Cadriz"
 				message += "\n`smelt smelt wood|cobble|iron_ore|gold_ore|diamond_ore|emerald_ore|cadriz_ore [<times>]`"
 				sendVolatileMessage(event, message)
 				1
