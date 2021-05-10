@@ -7,25 +7,36 @@ import io.github.cadrizor_team.cadrizor_bot.roleplay.crafting.RecipeBuilder
 enum class SmeltingLevel(val smeltingResult: Int, val maxInput: Int, val nextTierRecipe: Recipe?) {
 	NONE(0, 0, null),
 	COBBLE(
-			1,
-			25,
-			RecipeBuilder(
-					name = "Stone Furnace",
-					onCraft = { it.furnaceLevel = STONE },
-					condition = { it.furnaceLevel == COBBLE },
-					stone = from(250)
-			).build()),
-	STONE(
-			1,
-			40,
-			RecipeBuilder(
-					name = "Iron Furnace",
-					onCraft = { it.furnaceLevel = IRON },
-					condition = { it.furnaceLevel == STONE },
-					iron = from(300)
-			).build()
+		1,
+		25,
+		RecipeBuilder(
+			name = "Stone Furnace",
+			onCraft = { it.furnaceLevel = STONE },
+			condition = { it.furnaceLevel == COBBLE },
+			stone = from(250)
+		).build()
 	),
-	IRON(1, 60, null),
+	STONE(
+		1,
+		40,
+		RecipeBuilder(
+			name = "Iron Furnace",
+			onCraft = { it.furnaceLevel = IRON },
+			condition = { it.furnaceLevel == STONE },
+			iron = from(300)
+		).build()
+	),
+	IRON(
+		1,
+		60,
+		RecipeBuilder(
+			name = "Diamond Furnace",
+			onCraft = { it.furnaceLevel = DIAMOND },
+			condition = { it.furnaceLevel == IRON },
+			diamond = from(400),
+			emerald = from(350)
+		).build()
+	),
 	GOLD(1, 65, null),
 	DIAMOND(2, 90, null),
 	EMERALD(2, 95, null),
